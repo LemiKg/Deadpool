@@ -1,25 +1,51 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
+// import { request } from 'http';
 
 class App extends Component {
-  render() {
+  
+  state = {
+    loading: false, 
+    comic: null
+  }
+
+// searchHandler = this.searchHandler.bind(this )
+
+  async componentDidMount() {
+    const url = 'https://gateway.marvel.com:443/v1/public/comics?title=deadpool&apikey=a93ddd972615dbdf44cf20c09e216ac3';
+    const response = await fetch(url);
+    const fetchedData = await response.json();
+    this.setState({ comic: fetchedData.data.results });
+  }
+
+  render() {   
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+      <div className="app">
+
+      {this.state.loading || !this.state.comic ? (
+        <div className="loading">Loading</div>
+        ) : (
+        <div className="container">
+
+          <form>
+            <input type="text" 
+                    // onChange={this.searchHandler}
+            />
+            <button type="button">Search</button>
+          </form>
+
+          <div className="comics">
+            {this.state.comic.map((value, index) => {
+              return (
+                <div className="comic" key={index}>
+                  <h4>{value.title}</h4>
+                  <img className="comic-thumbnail" alt="deadpool" src={`${value.thumbnail.path}.${value.thumbnail.extension}`}/> 
+                </div>
+              )
+            })};
+          </div>
+        </div>
+      )}
       </div>
     );
   }
