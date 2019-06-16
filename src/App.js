@@ -8,6 +8,7 @@ class App extends Component {
     loading: false, 
     comic: null
   }
+  
 
 // searchHandler = this.searchHandler.bind(this )
 
